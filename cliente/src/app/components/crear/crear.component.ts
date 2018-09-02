@@ -1,7 +1,6 @@
-import { ActivatedRoute, Params } from '@angular/router';
 import { RackService } from './../../rack.service';
 import { Rack } from './../shared/models/rack';
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { Location } from '@angular/common';
 
 
@@ -11,25 +10,32 @@ import { Location } from '@angular/common';
   templateUrl: './crear.component.html',
   styles: []
 })
-export class CrearComponent implements OnInit {
+export class CrearComponent {
   rack = new Rack();
   enviado = false;
   mensaje: string;
 
   constructor(
     private rackService: RackService,
-    private route: ActivatedRoute,
     private location: Location
   ) {}
 
-  ngOnInit(): void {
-    const id = +this.route.snapshot.paramMap.get('id');
-    this.rackService.getRack(id).subscribe(rack => {
-      this.rack = rack;
-    });
-  }
+nouRack(): void {
+  this.enviado = false;
+  this.rack = new Rack;
+}
+
+addRack() {
+  this.enviado = true;
+  this.save();
+}
 
   goBack(): void {
     this.location.back();
+  }
+
+  private save(): void {
+    this.rackService.crearRack(this.rack)
+      .subscribe();
   }
 }

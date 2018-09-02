@@ -3,7 +3,7 @@ const router = express.Router();
 const pool = require('../db/dbCon');
 
 
-router.get('/racks', (req, res) => {
+router.get('/racks', (req, res, next) => {
     pool.query(
         'SELECT * FROM rackStatus', (err, rows) => {
             if (!err) {
@@ -15,7 +15,7 @@ router.get('/racks', (req, res) => {
     );
 });
 
-router.get('/racks/:id', (req, res) => {
+router.get('/racks/:id', (req, res, next) => {
 
     const { id } = req.params;
 
@@ -30,7 +30,7 @@ router.get('/racks/:id', (req, res) => {
     );
 });
 
-router.post('/racks', (req, res) => {
+router.post('/racks', (req, res, next) => {
     const { id, host, lat, lng, ico, img, info } = req.body;
     const query = `
     CALL CreateUpdate(?, ?, ?, ?, ?, ?, ?);
@@ -47,7 +47,7 @@ router.post('/racks', (req, res) => {
     });
 });
 
-router.put('/racks/:id', (req, res) => {
+router.put('/racks/:id', (req, res, next) => {
     const { host, lat, lng, ico, img, info } = req.body;
     const { id } = req.params;
     const query = `
@@ -65,7 +65,7 @@ router.put('/racks/:id', (req, res) => {
     });
 });
 
-router.delete('/racks/:id', (req, res) => {
+router.delete('/racks/:id', (req, res, next) => {
     const { id } = req.params;
     const query = `
     DELETE FROM rackStatus WHERE id = ?

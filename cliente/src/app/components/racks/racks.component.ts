@@ -19,7 +19,7 @@ export class RacksComponent implements OnInit {
   getListado() {
     this.rackService.getListado().subscribe((data) => {
       const dataArray = Object.keys(data).map(i => data[i]);
-      this.racks = dataArray[0];
+      this.racks = dataArray;
       console.log(this.racks);
     });
   }
