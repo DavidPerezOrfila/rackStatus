@@ -1,0 +1,27 @@
+<h4><span class="badge badge-light">{{rack.id}}</span></h4>
+
+<div class="jumbotron mt-5" style="background-color:#f5f3ea">
+    <div class="container">
+        <form class="col">
+            <div class="form-row">
+                <div class="form-group col">
+                    <label for="inputHost" class="badge badge-dark" style="background-color: #639ea9">Nombre del Host</label>
+                    <input type="email" class="form-control" id="inputHost" placeholder="Host">
+                </div>
+                <form class="col form-inline" name="upload-form" action="upload" method="post" enctype="multipart/form-data">
+                    <input class="form-group mt-3" type="file" name="attachment" id="attachment">
+                    <button class="btn btn-dark ml-1 mt-3" type="submit" style="background-color: #639ea9">Subir</button>
+                </form>
+            </div>
+            <div class="row">
+            </div>
+            <div class="form-row">
+                <form class="form-inline ml-1">
+                    <button type="button" class="btn btn-dark" (click)="goBack()" style="background-color: #639ea9">Atrás</button>
+                    <button type="button" class="btn btn-dark" (click)="update()" [disabled]="!rackForm.form.valid" style="background-color: #639ea9">Editar</button>
+                    <button type="button" class="btn btn-dark" (click)="delete()" style="background-color: #639ea9">Borrar</button>
+                </form>
+            </div>
+        </form>
+    </div>
+</div>
