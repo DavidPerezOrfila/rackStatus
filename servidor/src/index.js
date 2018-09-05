@@ -1,21 +1,22 @@
 const express = require('express');
 const app = express();
 const cors = require('cors');
-const fileUpload = require('express-fileupload');
-
+const corsOptions = {
+    origin: 'http://localhost:4200',
+    optionsSuccessStatus: 200
+}
 
 // Settings
 app.set('port', process.env.PORT || 3000);
 
 // Middlewares
 app.use(express.json());
-app.use(cors());
+app.use(cors(corsOptions));
 
-// default options
-app.use(fileUpload());
 
 // Routes
 app.use(require('./routes/racks'));
+app.use(require('./routes/upload'));
 
 // Start server
 

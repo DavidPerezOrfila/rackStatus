@@ -1,4 +1,8 @@
+import { RackService } from './../../rack.service';
+import { Rack } from './../shared/models/rack';
 import { Component } from '@angular/core';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-editar',
@@ -6,12 +10,9 @@ import { Component } from '@angular/core';
   styles: []
 })
 export class EditarComponent {
+  constructor(private rackService: RackService, private location: Location) {}
 
-  constructor() { }
-
-//   const id = +this.route.snapshot.paramMap.get('id');
-//     this.rackService.getRack(id).subscribe(rack => {
-//   this.rack = rack;
-// });
-
+  goBack(): void {
+    this.location.back();
+  }
 }

@@ -44,7 +44,7 @@ export class RackService {
   }
 
   crearRack(rack: Rack): Observable<Rack> {
-    return this.http.post<Rack>(`${this.racksUrl}`, rack, httpOptions);
+    return this.http.post<Rack>(`${this.racksUrl}/racks`, rack, httpOptions);
   }
 
   borraRack(rack: Rack | number): Observable<Rack> {

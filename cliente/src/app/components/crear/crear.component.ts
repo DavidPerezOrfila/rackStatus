@@ -26,8 +26,12 @@ nouRack(): void {
 }
 
 addRack() {
+  this.rack.id = 0;
   this.enviado = true;
   this.save();
+  this.mensaje = 'Host creado!';
+
+  // this.location.back();
 }
 
   goBack(): void {
