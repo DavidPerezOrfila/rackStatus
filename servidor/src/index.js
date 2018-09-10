@@ -12,11 +12,10 @@ app.set('port', process.env.PORT || 3000);
 // Middlewares
 app.use(express.json());
 app.use(cors(corsOptions));
-
+app.use('/static', express.static('public'));
 
 // Routes
 app.use(require('./routes/racks'));
-app.use(require('./routes/upload'));
 
 // Start server
 

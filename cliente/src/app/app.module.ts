@@ -3,6 +3,8 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { RouterModule } from '@angular/router';
 import { HttpClientModule } from '@angular/common/http';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MatButtonModule, MatCheckboxModule } from '@angular/material';
 
 // Components
 import { AppComponent } from './app.component';
@@ -18,7 +20,6 @@ import { RackService } from './rack.service';
 import { APP_Routes } from './app.routes';
 import { KeyValuePipe } from './key-value.pipe';
 
-
 @NgModule({
   declarations: [
     AppComponent,
@@ -33,7 +34,10 @@ import { KeyValuePipe } from './key-value.pipe';
     RouterModule.forRoot(APP_Routes),
     HttpClientModule,
     ReactiveFormsModule,
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatButtonModule,
+    MatCheckboxModule
   ],
   providers: [RackService],
   bootstrap: [AppComponent]

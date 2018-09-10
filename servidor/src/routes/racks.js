@@ -1,11 +1,12 @@
 const express = require('express');
 const router = express.Router();
 const pool = require('../db/dbCon');
-
+const fileUpload = require('express-fileupload');
+router.use(fileUpload());
 
 router.get('/racks', (req, res, next) => {
     pool.query(
-        'SELECT * FROM rackStatus', (err, rows) => {
+        `SELECT * FROM rackStatus ORDER BY id ASC`, (err, rows) => {
             if (!err) {
                 res.json(rows);
             } else {
@@ -30,6 +31,16 @@ router.get('/racks/:id', (req, res, next) => {
     );
 });
 
+// router.get('/public/assets/img', (req, res, next) => {
+//     (err, images) => {
+//         if (!err) {
+//             res.json(images);
+//         } else {
+//             console.log(err);
+//         }
+//     }
+// });
+
 router.post('/racks', (req, res, next) => {
     const { id, host, lat, lng, ico, img, info } = req.body;
     const query = `
@@ -48,8 +59,36 @@ router.post('/racks', (req, res, next) => {
 });
 
 router.put('/racks/:id', (req, res, next) => {
-    const { host, lat, lng, ico, img, info } = req.body;
+    let { host, lat, lng, ico, img, info } = req.body;
     const { id } = req.params;
+    let archivo = req.files.archivo;
+    let nombreCortado = archivo.name.split('.');
+    let extension = nombreCortado[nombreCortado.length - 1];
+    let nombre = nombreCortado[nombreCortado.length - 2];
+
+    // Extensiones permitidas
+
+    let extensionesValidas = ['png', 'jpg', 'jpeg'];
+
+    if (extensionesValidas.indexOf(extension) < 0) {
+        return res.status(400)
+            .json({
+                ok: false,
+                message: 'Las extensiones permitidas son: ' + extensionesValidas.join(', '),
+                ext: extension
+            })
+    }
+
+    let nombreArchivo = `${id}${nombre}${Date.now()}.${extension}`;
+    archivo.mv(`public/assets/img/${nombreArchivo}`, (err) => {
+        if (err)
+            return res.status(500).json({
+                ok: false,
+                err
+            });
+    });
+    img = `/static/assets/img/${nombreArchivo}`;
+
     const query = `
     CALL CreateUpdate(?, ?, ?, ?, ?, ?, ?);
     `;
@@ -57,7 +96,7 @@ router.put('/racks/:id', (req, res, next) => {
     pool.query(query, [id, host, lat, lng, ico, img, info], (err, rows) => {
         if (!err) {
             res.json({
-                Status: 'Empleado actualizado'
+                Status: 'Rack actualizado'
             });
         } else {
             console.log(err);
