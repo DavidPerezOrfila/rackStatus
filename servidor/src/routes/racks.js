@@ -3,6 +3,7 @@ const router = express.Router();
 const pool = require('../db/dbCon');
 const fileUpload = require('express-fileupload');
 router.use(fileUpload());
+const fs = require('fs');
 
 router.get('/racks', (req, res, next) => {
     pool.query(
@@ -31,16 +32,6 @@ router.get('/racks/:id', (req, res, next) => {
     );
 });
 
-// router.get('/public/assets/img', (req, res, next) => {
-//     (err, images) => {
-//         if (!err) {
-//             res.json(images);
-//         } else {
-//             console.log(err);
-//         }
-//     }
-// });
-
 router.post('/racks', (req, res, next) => {
     const { id, host, lat, lng, ico, img, info } = req.body;
     const query = `
@@ -50,7 +41,7 @@ router.post('/racks', (req, res, next) => {
     pool.query(query, [id, host, lat, lng, ico, img, info], (err, rows) => {
         if (!err) {
             res.json({
-                Status: 'Empleado guardado'
+                Status: 'Rack guardado'
             });
         } else {
             console.log(err);
@@ -61,6 +52,17 @@ router.post('/racks', (req, res, next) => {
 router.put('/racks/:id', (req, res, next) => {
     let { host, lat, lng, ico, img, info } = req.body;
     const { id } = req.params;
+
+    if (!req.files) {
+        return res.status(400)
+            .json({
+                ok: false,
+                message: 'No ha seleccionado ningún archivo',
+                err: { mensaje: 'Debe seleccionar una imagen' }
+            })
+    }
+
+    // Obtener nombre del archivo
     let archivo = req.files.archivo;
     let nombreCortado = archivo.name.split('.');
     let extension = nombreCortado[nombreCortado.length - 1];
@@ -79,14 +81,20 @@ router.put('/racks/:id', (req, res, next) => {
             })
     }
 
+    // Nombre del archivo personalizado
+    //id+nombre+fecha.ext
     let nombreArchivo = `${id}${nombre}${Date.now()}.${extension}`;
+
+    // Mover archivo del temporal a una ruta concreta
     archivo.mv(`public/assets/img/${nombreArchivo}`, (err) => {
         if (err)
             return res.status(500).json({
                 ok: false,
                 err
             });
+        // comprobarImagen(id, res);
     });
+
     img = `/static/assets/img/${nombreArchivo}`;
 
     const query = `
@@ -113,12 +121,32 @@ router.delete('/racks/:id', (req, res, next) => {
     pool.query(query, [id], (err) => {
         if (!err) {
             res.json({
-                Status: 'Empleado eliminado'
+                Status: 'Rack eliminado'
             });
         } else {
             console.log(err);
         }
     });
 });
+
+// function comprobarImagen(id, res) {
+//     pool.query(
+//         'SELECT * FROM rackStatus WHERE id = ?', [id], (err, rows) => {
+
+//             // Si existe, elimina la imagen anterior
+//             let pathAntiguo = rows[0].img.split('/');
+//             let imagenAntigua = pathAntiguo[pathAntiguo.length - 1];
+//             console.log(imagenAntigua);
+//             if (fs.accessSync(`public/assets/img/${imagenAntigua}`)) {
+//                 fs.unlink(`public/assets/img/${imagenAntigua}`)
+//             }
+//             if (!err) {
+//                 res.json(rows[0]);
+//             } else {
+//                 console.log(err);
+//             }
+//         }
+//     );
+// }
 
 module.exports = router;

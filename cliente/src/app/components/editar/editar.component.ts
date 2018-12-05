@@ -15,6 +15,7 @@ export class EditarComponent implements OnInit {
   mensaje: string;
   envFoto = false;
   archivo: File;
+
   constructor(
     private rackService: RackService,
     private route: ActivatedRoute,
