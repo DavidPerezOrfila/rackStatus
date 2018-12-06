@@ -80,7 +80,7 @@ router.put('/racks/:id', (req, res, next) => {
                 ext: extension
             })
     }
-
+    let pathAntiguo = img;
     // Nombre del archivo personalizado
     //id+nombre+fecha.ext
     let nombreArchivo = `${id}${nombre}${Date.now()}.${extension}`;
@@ -92,7 +92,7 @@ router.put('/racks/:id', (req, res, next) => {
                 ok: false,
                 err
             });
-        comprobarImagen(id, img, nombreArchivo);
+        comprobarImagen(id, pathAntiguo, nombreArchivo);
     });
 
 
@@ -128,13 +128,12 @@ router.delete('/racks/:id', (req, res, next) => {
     });
 });
 
-function comprobarImagen(id, nombreArchivo, img) {
+function comprobarImagen(id, pathAntiguo, nombreArchivo) {
     this.id = id;
-    let pathCortado = img.split('/');
-    let imagenAntigua = pathCortado[pathCortado.length - 1];
-    if (fs.existsSync(imagenAntigua)) {
-        fs.unlink(imagenAntigua);
-    }
+    let pathCortado = pathAntiguo.split('/');
+    let imagen = pathCortado[pathCortado.length - 1];
+    let path = `public/assets/img/${imagen}`
+    fs.unlinkSync(path);
     img = `/static/assets/img/${nombreArchivo}`;
 };
 
