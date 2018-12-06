@@ -92,10 +92,9 @@ router.put('/racks/:id', (req, res, next) => {
                 ok: false,
                 err
             });
-        // comprobarImagen(id, res);
+        comprobarImagen(id, img, nombreArchivo);
     });
 
-    img = `/static/assets/img/${nombreArchivo}`;
 
     const query = `
     CALL CreateUpdate(?, ?, ?, ?, ?, ?, ?);
@@ -129,24 +128,14 @@ router.delete('/racks/:id', (req, res, next) => {
     });
 });
 
-// function comprobarImagen(id, res) {
-//     pool.query(
-//         'SELECT * FROM rackStatus WHERE id = ?', [id], (err, rows) => {
-
-//             // Si existe, elimina la imagen anterior
-//             let pathAntiguo = rows[0].img.split('/');
-//             let imagenAntigua = pathAntiguo[pathAntiguo.length - 1];
-//             console.log(imagenAntigua);
-//             if (fs.accessSync(`public/assets/img/${imagenAntigua}`)) {
-//                 fs.unlink(`public/assets/img/${imagenAntigua}`)
-//             }
-//             if (!err) {
-//                 res.json(rows[0]);
-//             } else {
-//                 console.log(err);
-//             }
-//         }
-//     );
-// }
+function comprobarImagen(id, nombreArchivo, img) {
+    this.id = id;
+    let pathCortado = img.split('/');
+    let imagenAntigua = pathCortado[pathCortado.length - 1];
+    if (fs.existsSync(imagenAntigua)) {
+        fs.unlink(imagenAntigua);
+    }
+    img = `/static/assets/img/${nombreArchivo}`;
+};
 
 module.exports = router;
