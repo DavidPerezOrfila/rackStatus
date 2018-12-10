@@ -80,7 +80,9 @@ router.put('/racks/:id', (req, res, next) => {
                 ext: extension
             })
     }
+
     let pathAntiguo = img;
+
     // Nombre del archivo personalizado
     //id+nombre+fecha.ext
     let nombreArchivo = `${id}${nombre}${Date.now()}.${extension}`;
@@ -127,6 +129,8 @@ router.delete('/racks/:id', (req, res, next) => {
         }
     });
 });
+
+// Comprueba si ya hay una imagen procedente de la misma id y borra la antigua
 
 function comprobarImagen(id, pathAntiguo, nombreArchivo) {
     this.id = id;

@@ -2,4 +2,4 @@
 
 cd "C:\UniServerZ\www\rackStatus\servidor"
 
-start npm run build
+start npm run server

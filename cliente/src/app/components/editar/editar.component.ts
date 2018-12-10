@@ -14,7 +14,8 @@ export class EditarComponent implements OnInit {
   enviado = false;
   mensaje: string;
   envFoto = false;
-  archivo: File;
+  urls = new Array<string>();
+  selectedFile: File = null;
 
   constructor(
     private rackService: RackService,
@@ -29,8 +30,9 @@ export class EditarComponent implements OnInit {
 
   update(): void {
     this.enviado = true;
+    console.log(this.rack);
     this.rackService
-      .actualizaRack(this.rack)
+      .actualizaRack(this.rack, this.selectedFile, this.rack.id)
       .subscribe(() => (this.mensaje = 'Host actualizado correctamente'));
   }
 
@@ -41,14 +43,20 @@ export class EditarComponent implements OnInit {
       .subscribe(() => (this.mensaje = 'Host borrado correctamente'));
   }
 
-  onFileSelected(file: File) {
-    if (!file) {
-      this.archivo = null;
-      return;
+  onFileSelected(event) {
+    this.urls = [];
+    const files = event.target.files;
+    this.selectedFile = <File>event.target.files[0];
+    if (files) {
+      for (const file of files) {
+        // tslint:disable-next-line:prefer-const
+        let reader = new FileReader();
+        reader.onload = (e: any) => {
+          this.urls.push(e.target.result);
+        };
+        reader.readAsDataURL(file);
+      }
     }
-    this.archivo = file;
-    console.log(this.archivo);
-    return this.archivo;
   }
 
   goBack(): void {

@@ -4,13 +4,14 @@
     "description": "",
     "main": "server.js",
     "scripts": {
-        "build": "nodemon src/index.js",
+        "server": "nodemon src/index.js",
         "start": "node server.js"
     },
     "keywords": [],
     "author": "",
     "license": "ISC",
     "dependencies": {
+        "body-parser": "^1.18.3",
         "cors": "^2.8.4",
         "express": "^4.16.3",
         "express-fileupload": "^0.4.0",
